@@ -1,0 +1,9 @@
+Package: dev.traurige.ink
+Name: Ink
+Version: 1.0
+Depends: firmware (>= 14.2), mobilesubstrate, preferenceloader
+Architecture: iphoneos-arm
+Description: Experimental iOS 16 lock screen replica
+Maintainer: Traurige <hello@traurige.dev>
+Author: Traurige <hello@traurige.dev>
+Section: Tweaks
