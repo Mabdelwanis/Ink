@@ -33,13 +33,13 @@ static void setInkArtworkImageView(CSCoverSheetView* self, SEL _cmd, UIImageView
 
 #pragma mark - CSCoverSheetView class hooks
 
-static void (* orig_CSCoverSheetView_initWithFrame)(CSCoverSheetView* self, SEL _cmd, CGRect frame);
-static void override_CSCoverSheetView_initWithFrame(CSCoverSheetView* self, SEL _cmd, CGRect frame) {
+static CSCoverSheetView* (* orig_CSCoverSheetView_initWithFrame)(CSCoverSheetView* self, SEL _cmd, CGRect frame);
+static CSCoverSheetView* override_CSCoverSheetView_initWithFrame(CSCoverSheetView* self, SEL _cmd, CGRect frame) {
     orig_CSCoverSheetView_initWithFrame(self, _cmd, frame);
 
     coverSheetView = self;
 
-
+    // artwork background
     [self setInkArtworkBackgroundImageView:[[UIImageView alloc] initWithFrame:[self bounds]]];
 	[[self inkArtworkBackgroundImageView] setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
 	[[self inkArtworkBackgroundImageView] setContentMode:UIViewContentModeScaleAspectFill];
@@ -47,11 +47,13 @@ static void override_CSCoverSheetView_initWithFrame(CSCoverSheetView* self, SEL 
 	[self insertSubview:[self inkArtworkBackgroundImageView] atIndex:0];
 
 
+    // backdrop
     _UIBackdropViewSettings* settings = (_UIBackdropViewSettings *)[[objc_getClass("_UIBackdropViewSettingsATVMediumDark") alloc] init];
     _UIBackdropView* backdropView = [[objc_getClass("_UIBackdropView") alloc] initWithFrame:[[self inkArtworkBackgroundImageView] bounds] autosizesToFitSuperview:YES settings:settings];
     [[self inkArtworkBackgroundImageView] addSubview:backdropView];
 
 
+    // artwork container
     [self setInkArtworkContainerView:[[UIView alloc] init]];
     [[self inkArtworkBackgroundImageView] addSubview:[self inkArtworkContainerView]];
 
@@ -64,6 +66,7 @@ static void override_CSCoverSheetView_initWithFrame(CSCoverSheetView* self, SEL 
     ]];
 
 
+    // artwork
     [self setInkArtworkImageView:[[UIImageView alloc] init]];
     [[self inkArtworkImageView] setClipsToBounds:YES];
     [[[self inkArtworkImageView] layer] setCornerRadius:8];
@@ -76,6 +79,8 @@ static void override_CSCoverSheetView_initWithFrame(CSCoverSheetView* self, SEL 
         [[[self inkArtworkImageView] bottomAnchor] constraintEqualToAnchor:[[self inkArtworkContainerView] bottomAnchor]],
         [[[self inkArtworkImageView] leadingAnchor] constraintEqualToAnchor:[[self inkArtworkContainerView] leadingAnchor]]
     ]];
+
+    return self;
 }
 
 #pragma mark - CSAdjunctItemView class hooks

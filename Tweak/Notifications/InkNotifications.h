@@ -3,3 +3,6 @@
 
 @interface CSCombinedListViewController : UIViewController
 @end
+
+@interface CSFocusActivityView : UIView
+@end
